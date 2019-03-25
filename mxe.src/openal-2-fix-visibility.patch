@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0087edb2..28960a4f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -282,15 +282,6 @@ ELSE()
+                              int main() {return 0;}" HAVE_GCC_DESTRUCTOR)
+ ENDIF()
+ 
+-# Set visibility/export options if available
+-IF(WIN32)
+-    SET(EXPORT_DECL "__declspec(dllexport)")
+-    IF(NOT MINGW)
+-        SET(ALIGN_DECL "__declspec(align(x))")
+-    ELSE()
+-        SET(ALIGN_DECL "__declspec(aligned(x))")
+-    ENDIF()
+-ELSE()
+     SET(OLD_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+     # Yes GCC, really don't accept visibility modes you don't support
+     SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Wattributes -Werror")
+@@ -321,7 +312,6 @@ ELSE()
+     ENDIF()
+ 
+     SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS}")
+-ENDIF()
+ 
+ SET(SSE_SWITCH "")
+ SET(SSE2_SWITCH "")

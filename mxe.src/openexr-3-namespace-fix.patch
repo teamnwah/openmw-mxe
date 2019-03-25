@@ -1,0 +1,13 @@
+diff --git a/IlmImf/ImfDwaCompressor.h b/IlmImf/ImfDwaCompressor.h
+index 654ae790..ae80ca4e 100644
+--- a/IlmImf/ImfDwaCompressor.h
++++ b/IlmImf/ImfDwaCompressor.h
+@@ -71,7 +71,7 @@ class DwaCompressor: public Compressor
+
+     virtual int numScanLines () const;
+
+-    virtual Imf::Compressor::Format format () const;
++    virtual Format format () const;
+
+     virtual int compress (const char *inPtr,
+                           int         inSize,

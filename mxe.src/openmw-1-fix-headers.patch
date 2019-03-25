@@ -1,0 +1,42 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0ccfbfa55..3c2047dd5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -225,8 +225,8 @@ endif()
+ if(QT_STATIC)
+    if(WIN32)
+       if(DESIRED_QT_VERSION MATCHES 4)
+-         # QtCore needs WSAAsyncSelect from Ws2_32.lib
+-         set(QT_QTCORE_LIBRARY ${QT_QTCORE_LIBRARY} Ws2_32.lib)
++         # QtCore needs WSAAsyncSelect from ws2_32.lib
++         set(QT_QTCORE_LIBRARY ${QT_QTCORE_LIBRARY} ws2_32.lib)
+          message("QT_QTCORE_LIBRARY: ${QT_QTCORE_LIBRARY}")
+       endif()
+    endif()
+diff --git a/cmake/FindOSGPlugins.cmake b/cmake/FindOSGPlugins.cmake
+index 8220f33d4..2654bf5d5 100644
+--- a/cmake/FindOSGPlugins.cmake
++++ b/cmake/FindOSGPlugins.cmake
+@@ -28,9 +28,7 @@ foreach(_library ${OSGPlugins_FIND_COMPONENTS})
+ 
+     set(${_library_uc}_DIR ${OSGPlugins_LIB_DIR}) # to help function osg_find_library
+     set(_saved_lib_prefix ${CMAKE_FIND_LIBRARY_PREFIXES}) # save CMAKE_FIND_LIBRARY_PREFIXES
+-    set(CMAKE_FIND_LIBRARY_PREFIXES "") # search libraries with no prefix
+     osg_find_library(${_library_uc} ${_library}) # find it into ${_library_uc}_LIBRARIES
+-    set(CMAKE_FIND_LIBRARY_PREFIXES ${_saved_lib_prefix}) # restore prefix
+ 
+     if (${_library_uc}_LIBRARIES)
+         set(${_component}_LIBRARY ${${_library_uc}_LIBRARIES}) # fake as if we call find_library
+diff --git a/components/files/windowspath.cpp b/components/files/windowspath.cpp
+index 2354e6f31..36290db9a 100644
+--- a/components/files/windowspath.cpp
++++ b/components/files/windowspath.cpp
+@@ -6,7 +6,7 @@
+ 
+ #include <shlobj.h>
+ #include <shlwapi.h>
+-#include <WinReg.h>
++#include <winreg.h>
+ 
+ #include <boost/locale.hpp>
+ namespace bconv = boost::locale::conv;

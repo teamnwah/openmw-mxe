@@ -1,0 +1,161 @@
+diff --git a/IlmImf/ImfDwaCompressor.cpp b/IlmImf/ImfDwaCompressor.cpp
+index 1c1bd454..8bfc7d6f 100644
+--- a/IlmImf/ImfDwaCompressor.cpp
++++ b/IlmImf/ImfDwaCompressor.cpp
+@@ -1845,7 +1845,7 @@ DwaCompressor::numScanLines() const
+ }
+ 
+ 
+-Imf::Compressor::Format 
++Compressor::Format 
+ DwaCompressor::format() const
+ {
+     if (GLOBAL_SYSTEM_LITTLE_ENDIAN)
+@@ -1927,7 +1927,7 @@ DwaCompressor::compress
+         _outBuffer = new char[outBufferSize];
+     }
+ 
+-    char *outDataPtr = &_outBuffer[NUM_SIZES_SINGLE * sizeof(Imf::Int64) +
++    char *outDataPtr = &_outBuffer[NUM_SIZES_SINGLE * sizeof(Int64) +
+                                    channelRuleSize];
+ 
+     //
+@@ -1980,7 +1980,7 @@ DwaCompressor::compress
+ 
+     if (fileVersion >= 2) 
+     {
+-        char *writePtr = &_outBuffer[NUM_SIZES_SINGLE * sizeof(Imf::Int64)];
++        char *writePtr = &_outBuffer[NUM_SIZES_SINGLE * sizeof(Int64)];
+         Xdr::write<CharPtrIO> (writePtr, channelRuleSize);
+         
+         for (size_t i = 0; i < channelRules.size(); ++i) 
+@@ -2011,7 +2011,7 @@ DwaCompressor::compress
+                 continue;
+ 
+             rowPtrs[chan].push_back(inDataPtr);
+-            inDataPtr += cd->width * Imf::pixelTypeSize(cd->type);
++            inDataPtr += cd->width * pixelTypeSize(cd->type);
+         }
+     }
+ 
+@@ -2111,7 +2111,7 @@ DwaCompressor::compress
+                 for (int x = 0; x < cd->width; ++x)
+                 {
+                     for (int byte = 0;
+-                         byte < Imf::pixelTypeSize (cd->type);
++                         byte < pixelTypeSize (cd->type);
+                          ++byte)
+                     {
+                             
+@@ -2119,7 +2119,7 @@ DwaCompressor::compress
+                     }
+                 }
+ 
+-                *rleRawSize += cd->width * Imf::pixelTypeSize(cd->type);
++                *rleRawSize += cd->width * pixelTypeSize(cd->type);
+             }
+ 
+             break;
+@@ -2131,7 +2131,7 @@ DwaCompressor::compress
+             //
+ 
+             {
+-                int scanlineSize = cd->width * Imf::pixelTypeSize(cd->type);
++                int scanlineSize = cd->width * pixelTypeSize(cd->type);
+ 
+                 for (unsigned int y = 0; y < rowPtrs[chan].size(); ++y)
+                 {
+@@ -2650,7 +2650,7 @@ DwaCompressor::uncompress
+                 continue;
+ 
+             rowPtrs[chan].push_back (outBufferEnd);
+-            outBufferEnd += cd->width * Imf::pixelTypeSize (cd->type);
++            outBufferEnd += cd->width * pixelTypeSize (cd->type);
+         }
+     }
+ 
+@@ -2702,7 +2702,7 @@ DwaCompressor::uncompress
+             continue;
+ 
+         ChannelData *cd = &_channelData[chan];
+-        int pixelSize = Imf::pixelTypeSize (cd->type);
++        int pixelSize = pixelTypeSize (cd->type);
+ 
+         switch (cd->compression)
+         {
+@@ -2794,7 +2794,7 @@ DwaCompressor::uncompress
+ 
+             {
+                 int row             = 0;
+-                int dstScanlineSize = cd->width * Imf::pixelTypeSize (cd->type);
++                int dstScanlineSize = cd->width * pixelTypeSize (cd->type);
+ 
+                 for (int y = minY; y <= maxY; ++y)
+                 {
+@@ -2940,7 +2940,7 @@ DwaCompressor::initializeBuffers (size_t &outBufferSize)
+                 //
+ 
+                 int rleAmount = 2 * numScanLines() * (_max[0] - _min[0] + 1) *
+-                                Imf::pixelTypeSize (_channelData[chan].type);
++                                pixelTypeSize (_channelData[chan].type);
+ 
+                 rleBufferSize += rleAmount;
+             }
+@@ -2950,7 +2950,7 @@ DwaCompressor::initializeBuffers (size_t &outBufferSize)
+           case UNKNOWN:
+ 
+             unknownBufferSize += numScanLines() * (_max[0] - _min[0] + 1) *
+-                                 Imf::pixelTypeSize (_channelData[chan].type);
++                                 pixelTypeSize (_channelData[chan].type);
+             break;
+ 
+           default:
+@@ -3073,13 +3073,13 @@ DwaCompressor::initializeBuffers (size_t &outBufferSize)
+           case RLE:
+             planarUncBufferSize[RLE] +=
+                      numScanLines() * (_max[0] - _min[0] + 1) *
+-                     Imf::pixelTypeSize (_channelData[chan].type);
++                     pixelTypeSize (_channelData[chan].type);
+             break;
+ 
+           case UNKNOWN: 
+             planarUncBufferSize[UNKNOWN] +=
+                      numScanLines() * (_max[0] - _min[0] + 1) *
+-                     Imf::pixelTypeSize (_channelData[chan].type);
++                     pixelTypeSize (_channelData[chan].type);
+             break;
+ 
+           default:
+@@ -3386,11 +3386,11 @@ DwaCompressor::setupChannelData (int minX, int minY, int maxX, int maxY)
+     {
+         ChannelData *cd = &_channelData[chan];
+ 
+-        cd->width  = Imf::numSamples (cd->xSampling, minX, maxX);
+-        cd->height = Imf::numSamples (cd->ySampling, minY, maxY);
++        cd->width  = numSamples (cd->xSampling, minX, maxX);
++        cd->height = numSamples (cd->ySampling, minY, maxY);
+                                 
+         cd->planarUncSize =
+-            cd->width * cd->height * Imf::pixelTypeSize (cd->type);
++            cd->width * cd->height * pixelTypeSize (cd->type);
+                                   
+         cd->planarUncBuffer    = planarUncBuffer[cd->compression];
+         cd->planarUncBufferEnd = cd->planarUncBuffer;
+@@ -3398,7 +3398,7 @@ DwaCompressor::setupChannelData (int minX, int minY, int maxX, int maxY)
+         cd->planarUncRle[0]    = cd->planarUncBuffer;
+         cd->planarUncRleEnd[0] = cd->planarUncRle[0];
+ 
+-        for (int byte = 1; byte < Imf::pixelTypeSize(cd->type); ++byte)
++        for (int byte = 1; byte < pixelTypeSize(cd->type); ++byte)
+         {
+             cd->planarUncRle[byte] = 
+                          cd->planarUncRle[byte-1] + cd->width * cd->height;
+@@ -3416,7 +3416,7 @@ DwaCompressor::setupChannelData (int minX, int minY, int maxX, int maxY)
+         else
+         {
+             planarUncBuffer[cd->compression] +=
+-                cd->width * cd->height * Imf::pixelTypeSize (cd->planarUncType);
++                cd->width * cd->height * pixelTypeSize (cd->planarUncType);
+         }
+     }
+ }

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -e;
+
+# Repository used for OpenMW
+DEFAULT_OPENMW_REPO="https://github.com/OpenMW/openmw.git"
+# Branch to checkout and build (can also take tags)
+DEFAULT_OPENMW_BRANCH="0.45.0"
+# Dependencies that should be build for
+DEFAULT_OPENMW_DEPS="bullet qt openscenegraph boost ffmpeg openal sdl2 mygui"
+# Default target we should build.
+DEFAULT_OPENMW_TARGET="x86_64-w64-mingw32.static"
+
+# If tes3mp should be built
+OPENMW_TES3MP=${OPENMW_TES3MP:-0}
+
+if [ "${OPENMW_TES3MP}" = "1" ]; then
+  DEFAULT_OPENMW_REPO="https://github.com/TES3MP/openmw-tes3mp"
+  DEFAULT_OPENMW_BRANCH="0.7.0-alpha"
+  DEFAULT_OPENMW_DEPS+=" lua crabnet"
+fi
+
+# Set working values
+OPENMW_REPO=${OPENMW_REPO:-${DEFAULT_OPENMW_REPO}}
+OPENMW_BRANCH=${OPENMW_BRANCH:-${DEFAULT_OPENMW_BRANCH}}
+OPENMW_DEPS=${OPENMW_DEPS:-${DEFAULT_OPENMW_DEPS}}
+OPENMW_TARGET=${OPENMW_TARGET:-${DEFAULT_OPENMW_TARGET}}
+
+# Set PWD correctly for script
+cd "$(dirname "$(realpath "$0")")"
+
+nwah_mxe() {
+  cp -u mxe.src/* mxe/src;
+  test -f mxe/src/bullet-1-pkgconfig.patch && rm mxe/src/bullet-1-pkgconfig.patch;
+  pushd mxe;
+  echo "> mxe: make $@"
+  make MXE_TARGETS="${OPENMW_TARGET}" "$@";
+}
+
+main() {
+  local naked_cmd="${1}"
+  local cmd="nwah_${1}";
+  shift;
+
+  if [ "$(type -t "${cmd}")" != "function" ]; then
+    echo "No command found ${naked_cmd}";
+    nwah_usage;
+    exit 1;
+  fi
+
+  ${cmd} "$@";
+}
+
+main "$@"

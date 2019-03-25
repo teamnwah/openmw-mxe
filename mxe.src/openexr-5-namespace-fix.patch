@@ -1,0 +1,62 @@
+diff --git a/IlmImf/ImfZip.cpp b/IlmImf/ImfZip.cpp
+index 93d625e1..7268e948 100644
+--- a/IlmImf/ImfZip.cpp
++++ b/IlmImf/ImfZip.cpp
+@@ -42,14 +42,14 @@
+ 
+ OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
+ 
+-Imf::Zip::Zip(size_t maxRawSize):
++Zip::Zip(size_t maxRawSize):
+     _maxRawSize(maxRawSize),
+     _tmpBuffer(0)
+ {
+     _tmpBuffer = new char[_maxRawSize];
+ }
+ 
+-Imf::Zip::Zip(size_t maxScanLineSize, size_t numScanLines):
++Zip::Zip(size_t maxScanLineSize, size_t numScanLines):
+     _maxRawSize(0),
+     _tmpBuffer(0)
+ {
+@@ -57,19 +57,19 @@ Imf::Zip::Zip(size_t maxScanLineSize, size_t numScanLines):
+     _tmpBuffer  = new char[_maxRawSize];
+ }
+ 
+-Imf::Zip::~Zip()
++Zip::~Zip()
+ {
+     if (_tmpBuffer) delete[] _tmpBuffer;
+ }
+ 
+ size_t
+-Imf::Zip::maxRawSize()
++Zip::maxRawSize()
+ {
+     return _maxRawSize;
+ }
+ 
+ size_t
+-Imf::Zip::maxCompressedSize()
++Zip::maxCompressedSize()
+ {
+     return uiAdd (uiAdd (_maxRawSize,
+                size_t (ceil (_maxRawSize * 0.01))),
+@@ -77,7 +77,7 @@ Imf::Zip::maxCompressedSize()
+ }
+ 
+ int
+-Imf::Zip::compress(const char *raw, int rawSize, char *compressed)
++Zip::compress(const char *raw, int rawSize, char *compressed)
+ {
+     //
+     // Reorder the pixel data.
+@@ -136,7 +136,7 @@ Imf::Zip::compress(const char *raw, int rawSize, char *compressed)
+ }
+ 
+ int
+-Imf::Zip::uncompress(const char *compressed, int compressedSize,
++Zip::uncompress(const char *compressed, int compressedSize,
+                                             char *raw)
+ {
+     //
