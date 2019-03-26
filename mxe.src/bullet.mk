@@ -10,6 +10,7 @@ $(PKG)_CHECKSUM := e6e8b755280ce2c1a8218529eae5dd78e184f7036854229cea611374ad5a6
 $(PKG)_GH_CONF  := bulletphysics/bullet3/releases
 $(PKG)_URL_2		:= https://github.com/bulletphysics/bullet3/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc
+$(PKG)_PATCHES  :=
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(TARGET)-cmake' . \

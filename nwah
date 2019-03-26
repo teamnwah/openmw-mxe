@@ -30,11 +30,10 @@ OPENMW_TARGET=${OPENMW_TARGET:-${DEFAULT_OPENMW_TARGET}}
 cd "$(dirname "$(realpath "$0")")"
 
 nwah_mxe() {
-  cp -u mxe.src/* mxe/src;
-  test -f mxe/src/bullet-1-pkgconfig.patch && rm mxe/src/bullet-1-pkgconfig.patch;
-  pushd mxe;
+  pushd mxe > /dev/null;
   echo "> mxe: make $@"
-  make MXE_TARGETS="${OPENMW_TARGET}" "$@";
+  make MXE_PLUGIN_DIRS="../mxe.src" MXE_TARGETS="${OPENMW_TARGET}" "$@";
+  popd > /dev/null;
 }
 
 main() {

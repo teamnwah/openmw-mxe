@@ -7,8 +7,10 @@ $(PKG)_CHECKSUM := b63cf971f406ef5f28019f65e9e2bd9641a227459ede45d147562917f67e1
 $(PKG)_GH_CONF  := openmw/openmw/releases
 $(PKG)_URL_2		:= https://github.com/openmw/openmw/archive/openmw-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc bullet qt openscenegraph boost ffmpeg openal sdl2 mygui
+$(PKG)_BINARY_LOCATION := $(PREFIX)/$(TARGET)/opt/openmw
 
 define $(PKG)_BUILD
+
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
 			-DMyGUI_LIBRARY=$(PREFIX)/$(TARGET)/lib/Release/libMyGUIEngineStatic.a \
 			-DMYGUI_STATIC=ON \
@@ -28,8 +30,10 @@ define $(PKG)_BUILD
 			-DBoost_ALL_NO_LIB=ON \
 			-DCMAKE_BUILD_TYPE=None \
 			-DBUILD_SHARED_LIBS=OFF \
-			-DCMAKE_CXX_FLAGS="-static -Wa,-mbig-obj -Wl,-Bstatic" \
+			-DCMAKE_CXX_FLAGS="-static -Wa,-mbig-obj -Wl,-Bstatic -DAL_LIBTYPE_STATIC" \
 			-DOPENMW_CUSTOM_FLAGS="-Wl,-Bstatic $(PREFIX)/$(TARGET)/lib/libOpenAL32.a `$(TARGET)-pkg-config --cflags --libs openal freetype2 sdl2 gl libavcodec libavdevice libavfilter libavformat libavresample libavutil`"
 		$(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
+    $(TARGET)-strip '$(BUILD_DIR)/openmw.exe'
+    mkdir -p '$($(PKG)_BINARY_LOCATION)'
+    cp '$(BUILD_DIR)/openmw.exe' '$($(PKG)_BINARY_LOCATION)'
 endef
