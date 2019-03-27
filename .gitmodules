@@ -1,3 +1,7 @@
 [submodule "mxe"]
 	path = mxe
 	url = https://github.com/mxe/mxe.git
+[submodule "openmw"]
+	path = openmw
+	url = https://github.com/openmw/openmw.git
+	branch = a381a1aff4216949e965132ece3c0a760a876253
