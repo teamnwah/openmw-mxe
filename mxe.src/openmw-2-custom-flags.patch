@@ -1,0 +1,46 @@
+diff --git a/apps/openmw/CMakeLists.txt b/apps/openmw/CMakeLists.txt
+index e64998077..af5335057 100644
+--- a/apps/openmw/CMakeLists.txt
++++ b/apps/openmw/CMakeLists.txt
+@@ -120,6 +120,7 @@ include_directories(
+ )
+ 
+ target_link_libraries(openmw
++    ${OPENMW_CXX_FLAGS}
+     ${OSG_LIBRARIES}
+     ${OPENTHREADS_LIBRARIES}
+     ${OSGPARTICLE_LIBRARIES}
+@@ -140,7 +141,7 @@ target_link_libraries(openmw
+     components
+ )
+ 
+-if (ANDROID)
++if (ANDROID OR OPENMW_STATIC)
+     set (OSG_PLUGINS
+         -Wl,--whole-archive
+     )
+@@ -153,15 +154,20 @@ if (ANDROID)
+     )
+ 
+     target_link_libraries(openmw
+-        EGL
+-        android
+-        log
+         dl
+         z
+         ${OPENSCENEGRAPH_LIBRARIES}
+         freetype
+         jpeg
+-    	png
++        png
++    )
++endif (ANDROID OR OPENMW_STATIC)
++
++if (ANDROID)
++    target_link_libraries(openmw
++        EGL
++        android
++        log
+     )
+ endif (ANDROID)
+ 
